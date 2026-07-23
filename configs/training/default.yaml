@@ -1,0 +1,33 @@
+# ============================================================
+# configs/training/default.yaml — default training hyperparameters
+# ============================================================
+# The "ritual" from P4 (zero_grad → forward → loss → backward → step)
+# happens in src/lyra_lite/training/train.py; this config tells it
+# what numbers to plug in.
+# ============================================================
+
+batch_size: 32              # mini-batch size (P4: balances GPU efficiency vs gradient noise)
+epochs: 50                  # full passes through the training set
+num_workers: 0              # parallel data-loading workers (PyTorch DataLoader)
+val_size: 0.2               # test site for train_test split
+
+# Early stopping (we stop training when validation loss stops improving)
+early_stopping:
+  patience: 5               # wait 5 epochs without improvement before stopping
+  min_delta: 1.0e-4         # minimum improvement to count as "still learning"
+
+# Optimizer config. Hydra will instantiate this as:
+#     torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
+optimizer:
+  _target_: torch.optim.Adam
+  lr: 1.0e-3                # learning rate — Adam's "good default" for almost anything
+  weight_decay: 1.0e-5      # L2 regularization (P4 topic: penalty on large weights)
+
+# Loss function. BCEWithLogitsLoss = sigmoid + BCE fused, more numerically stable
+# than BCE(sigmoid(x)) (P3 §3.10 discussion).
+loss:
+  _target_: torch.nn.BCEWithLogitsLoss
+
+# Evaluation metrics
+metrics:
+  ece_n_bins: 10

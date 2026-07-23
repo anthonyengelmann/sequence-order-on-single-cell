@@ -1,0 +1,92 @@
+# ============================================================
+# .gitignore — what Git should NOT track
+# ============================================================
+
+# --- Python build / cache artifacts ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+
+# --- Virtual environments ---
+# We never commit the venv itself — the lockfile is enough to recreate it.
+.venv/
+venv/
+env/
+
+# --- Environment variables / secrets ---
+# Anything sensitive (API keys, tokens) goes in .env, which is NEVER committed.
+.env
+.env.local
+.env.*.local
+
+# --- Data ---
+# Never commit data files. Use DVC or external storage for versioning.
+/data/
+*.h5ad
+*.h5
+*.npz
+*.parquet
+*.feather
+*.csv
+*.tsv
+# Allow tiny example files explicitly
+!data/examples/*.csv
+
+# --- Model checkpoints / outputs ---
+outputs/
+checkpoints/
+*.ckpt
+*.pt
+*.pth
+wandb/
+mlruns/
+lightning_logs/
+
+# --- Jupyter ---
+.ipynb_checkpoints/
+*.ipynb_meta
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# --- Testing / coverage ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# --- Hydra / experiment configs ---
+# Hydra writes per-run configs to outputs/; that directory is already gitignored.
+multirun/
+
+# LaTeX report source (the compiled PDF is submitted separately)
+report/
+
+# --- LaTeX build artifacts ---
+*.aux
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+*.out
+*.log
+
+# --- misc: backups + AI-assistant instructions (not submitted) ---
+*.bak
+CLAUDE.md

@@ -1,0 +1,18 @@
+# ============================================================
+# configs/model/fnn.yaml — FNN baseline architecture
+# ============================================================
+# This is the "dumb but honest" baseline. P3-style 2-layer net,
+# now in PyTorch with proper initialization, dropout, and BCEWithLogitsLoss.
+# Maps directly to Practical 3's neural-network-from-scratch arc, just bigger.
+# ============================================================
+
+# The _target_ key tells Hydra what class to instantiate. When we write
+# `hydra.utils.instantiate(cfg.model)` in code, it calls:
+#     lyra_lite.models.fnn.FNNBaseline(n_genes=2000, hidden_dim=256, dropout=0.2)
+# This way the config IS the model spec — no separate model registry needed.
+_target_: lyra_lite.models.fnn.FNNBaseline
+
+n_genes: 2000       # input dimensionality = number of highly variable genes
+hidden_dim: 256     # width of the single hidden layer (number of "specialists")
+dropout: 0.2        # fraction of hidden activations randomly zeroed during training
+                    # (P4 topic: prevents overfitting, forces redundant features)

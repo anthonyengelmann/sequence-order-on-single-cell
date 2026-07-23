@@ -1,0 +1,6 @@
+# configs/representation/tokens.yaml — padded rank-value token sequences (LSTM/Transformer)
+representation: tokens
+top_k: 256          # CAP on sequence length (with masking). Try 128 too — attention is O(top_k^2).
+ordering: rank      # rank | alphabetical | random  (ordering ablation; LSTM only)
+use_value: true     # rank+value (recommended) vs pure-rank (use_value: false)
+pad_id: 2000        # = n_hvgs (vocab size). MUST match data.n_hvgs and the model's embedding.

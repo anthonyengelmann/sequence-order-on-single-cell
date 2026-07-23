@@ -1,0 +1,27 @@
+# ============================================================
+# configs/eval/mrd.yaml — in-silico MRD limit-of-detection evaluation
+# ============================================================
+# Reframes evaluation from the (saturated) balanced blast-vs-normal task to the
+# rare-positive / MRD regime: spike a held-out patient's blasts into a normal
+# background at decreasing prevalences (pi) and measure AUPRC, sensitivity at a
+# fixed false-positive budget, and calibration (ECE) as a function of pi.
+#
+# Consumed by a runner (e.g. scripts/evaluate_mrd.py) that loads a trained
+# checkpoint and passes these keys to
+# lyra_lite.analysis.mrd_eval.evaluate_mrd_checkpoint / evaluate_specificity_controls.
+# ============================================================
+
+dilution_series: [0.1, 0.01, 0.001]           # blast prevalences pi (0.0001 dropped: below the honest normal-availability floor)
+n_bootstraps: 5                # pools per patient per pi (for confidence intervals)
+min_blasts: 10                 # floor on blasts per pool -> drives pool_size at low pi
+min_pool_size: 5000            # floor on total cells per pool (lowered to cap MRD memory)
+target_fpr: 0.001              # false-positive budget for sensitivity@FPR (1 in 1000 normals)
+ece_n_bins: 10                 # ECE bins (keep equal to the training-time ECE for comparability)
+
+# Normal-cell source for the spike-in negative background:
+#   shared      -> draw from ALL held-out normal cells (diverse negatives, MRD-like background)
+#   per_patient -> draw from the target patient's own normals (purer, but N_eff-limited at low pi)
+background: shared
+
+specificity_thresholds: [0.5, 0.99]   # prob cutoffs for the false-alarm rate on blast-free patients
+seed: 42                              # base seed (varied per pi internally)

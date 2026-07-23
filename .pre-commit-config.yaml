@@ -1,0 +1,44 @@
+# ============================================================
+# .pre-commit-config.yaml — automatic checks run on `git commit`
+# ============================================================
+# Install once after cloning the repo:
+#     pre-commit install
+# Then every commit triggers these hooks. If a hook fails, the
+# commit is aborted with an explanation; fix the issue and commit again.
+# ============================================================
+
+repos:
+  # --- Generic hygiene checks ---
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace          # strip trailing whitespace
+      - id: end-of-file-fixer            # ensure files end with a single newline
+      - id: check-yaml                   # validate YAML syntax (configs/*.yaml)
+      - id: check-toml                   # validate TOML syntax (pyproject.toml)
+      - id: check-added-large-files      # block large files from sneaking in
+        args: [--maxkb=500]              # 500 KB limit; data should never be committed
+      - id: check-merge-conflict         # block unresolved merge-conflict markers
+      - id: debug-statements             # block stray `import pdb; pdb.set_trace()`
+
+  # --- ruff: linter + formatter ---
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.0
+    hooks:
+      - id: ruff                         # linter
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format                  # formatter (replaces black)
+
+  # --- mypy: static type checker (optional but worth it) ---
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-PyYAML, types-tqdm]
+        args: [--config-file=pyproject.toml]
+        # Limit mypy to our source code (don't try to check tests too strictly).
+        files: ^src/
+
+# Run hooks against the WHOLE repo (not just changed files) the first time
+# `pre-commit run --all-files` is invoked. Useful after fresh clones.
+fail_fast: false

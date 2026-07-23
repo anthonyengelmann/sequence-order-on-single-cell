@@ -1,0 +1,49 @@
+# ============================================================
+# configs/data/scpca.yaml — real ScPCA B-ALL data (blast vs normal-cell)
+# ============================================================
+# Single-cell Pediatric Cancer Atlas, project SCPCP000008.
+# Each *_processed_rna.h5ad is ONE sample (one patient/library) with
+# ScPCA's own QC + deconvolution normalization already applied
+# (X = logcounts). Hybrid approach: we REUSE their normalization but
+# RE-SELECT highly variable genes on the concatenated cohort, because
+# their per-file HVG flag is per-sample, not for the combined task.
+#
+# Interface: hydra.utils.instantiate(cfg.data) passes every key below
+# (except _target_) as a kwarg to make_scpca_dataset(...), which must
+# return (X, y, groups) — the SAME 3-tuple as make_synthetic_dataset,
+# so it drops straight into scripts/train.py and the patient-level split.
+# ============================================================
+
+_target_: lyra_lite.data.scpca.make_scpca_dataset
+
+# --- Where the data lives (rglob the per-sample folders) ---
+data_dir: ${paths.project_root}/data/SCPCP000008_ann-data/SCPCP000008_single-cell
+file_glob: "*_processed_rna.h5ad"     # 'processed' = log-normalized + expert annotations
+
+# --- Label: blast vs normal-cell (submitter = expert annotation) ---
+label_col: submitter_celltype_annotation
+positive_label: Blast                  # -> y = 1
+exclude_labels: [Submitter-excluded]   # dropped entirely (ambiguous / not annotated)
+# every remaining category (T_NK, Monocyte, Plasmablast, ...) -> y = 0
+
+# --- Patient grouping for the leakage-free patient-level split ---
+group_col: participant_id
+
+# --- Highly variable genes (recomputed on the concatenated cohort) ---
+# HVG is label-free, so fitting on all cells is an accepted mild shortcut;
+# train-only HVG is a clean stricter upgrade for later.
+n_hvgs: 2000
+hvg_flavor: seurat        # scanpy default; expects log-normalized input (logcounts = OK)
+# HVGs are chosen from a memory-bounded per-sample subsample (Pass 1), so the full
+# 60k-gene cohort is never held in RAM at once. Lower this if you still hit memory limits.
+hvg_fit_cells_per_sample: 300
+
+# --- Bring-up safety valve (null = use every cell). Set e.g. 2000 for a fast smoke test. ---
+max_cells_per_sample: null
+
+# --- Cache: the ~15-min ETL runs ONCE, then every run reloads the artifact instantly. ---
+# Artifacts (+ a JSON provenance manifest) are written here, keyed by n_hvgs and regime
+# (full vs. subsampled), so a smoke-test set can never be mistaken for the real one.
+cache_dir: ${paths.project_root}/data/cache
+
+seed: ${seed}

@@ -1,0 +1,6 @@
+# configs/representation/dense.yaml — raw [N, n_hvgs] float vectors (FNN baseline)
+representation: dense
+top_k: 256          # unused by dense; kept so the schema is uniform across representations
+ordering: rank      # unused by dense
+use_value: true     # unused by dense
+pad_id: 2000        # unused by dense; = n_hvgs (vocab size). Keep in sync with data.n_hvgs.

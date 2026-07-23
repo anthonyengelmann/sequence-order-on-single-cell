@@ -1,0 +1,23 @@
+# ============================================================
+# configs/data/synthetic.yaml — synthetic data for bring-up
+# ============================================================
+# Before we hook up Caron 2020, we use a synthetic dataset where
+# "leukemic" cells have elevated expression in a known subset of
+# genes. This lets us verify the model can learn ANYTHING before
+# we troubleshoot real-data complications (batch effects,
+# preprocessing bugs, label noise).
+#
+# Discipline: ALWAYS test the training pipeline on synthetic data
+# you control before pointing it at real data. Otherwise you don't
+# know whether a failure is a model bug or a data bug.
+# ============================================================
+
+_target_: lyra_lite.data.synthetic.make_synthetic_dataset
+
+n_cells: 4000           # total synthetic cells
+n_genes: 2000           # match what real Caron 2020 will give us after HVG selection
+n_disease_genes: 50     # how many genes carry the "leukemic" signal
+disease_effect: 0.5     # how strongly the disease genes are upregulated in leukemic cells
+noise_scale: 1.0        # technical noise added to all genes
+class_balance: 0.3      # fraction of cells that are leukemic (matches real-data imbalance)
+seed: ${seed}           # reads from the global seed in config.yaml

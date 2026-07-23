@@ -1,0 +1,11 @@
+_target_: lyra_lite.models.lstm.LSTMBaseline
+
+hidden_dim: 256     # width of the single hidden layer (number of "specialists")
+num_layers: 1       # number of LSTM layers
+dropout: 0.2        # fraction of hidden activations randomly zeroed during training
+                    # (P4 topic: prevents overfitting, forces redundant features)
+
+# parameter for token embedding
+vocab_size: 2001      # 2000 Gene + 1 PAD Token
+pad_id: 2000
+embedding_dim: 128   

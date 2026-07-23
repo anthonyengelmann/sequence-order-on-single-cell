@@ -1,0 +1,16 @@
+# configs/model/transformer.yaml
+_target_: lyra_lite.models.transformer.TransformerClassifier
+
+vocab_size: 2001
+pad_id: 2000
+
+# Architektur-Hyperparameter
+d_model: 128
+n_heads: 4
+num_layers: 2
+
+# core of the ablation study: positional encoding type
+positional_encoding: "none"  # change to "sinusoidal" for the ablation study
+attention: "dense"  # change to "sparse" for the ablation study
+
+num_classes: 1

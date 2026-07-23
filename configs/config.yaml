@@ -1,0 +1,40 @@
+# ============================================================
+# configs/config.yaml — Hydra root config
+# ============================================================
+# Hydra composes the final runtime config from this file plus
+# any "defaults" referenced below. You can override anything at
+# the command line:
+#     python scripts/train.py model=transformer training.epochs=100
+# ============================================================
+
+defaults:
+  # The order matters: later entries override earlier ones.
+  # _self_ at the end means "let this file's keys override the defaults".
+  - data: synthetic         # placeholder synthetic dataset to start with
+  - model: fnn              # FNN baseline by default
+  - training: default       # default training hyperparameters
+  - representation: dense   # dense (FNN) by default; use tokens for LSTM/Transformer
+  - _self_
+
+# --- Global settings (apply to every run regardless of model/dataset) ---
+
+seed: 42                    # master random seed; child configs derive from this
+device: mps                 # mps (Apple Silicon) | cuda (NVIDIA) | cpu
+
+paths:
+  # ${hydra:runtime.cwd} resolves to the directory the script was launched from.
+  # ${oc.env:DATA_DIR,<default>} reads the DATA_DIR env var, falling back to default.
+  project_root: ${hydra:runtime.cwd}
+  data_dir: ${oc.env:DATA_DIR,${paths.project_root}/data}
+  output_dir: ${paths.project_root}/outputs
+
+# --- Hydra's own behaviour ---
+hydra:
+  run:
+    dir: outputs/${now:%Y-%m-%d}/${now:%H-%M-%S}
+  sweep:
+    dir: outputs/multirun/${now:%Y-%m-%d}/${now:%H-%M-%S}
+    subdir: ${hydra.job.num}
+  callbacks:
+    aggregate:
+      _target_: lyra_lite.analysis.callbacks.AggregateCallback
