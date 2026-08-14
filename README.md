@@ -2,10 +2,8 @@
 
 **Dissecting order-sensitivity and permutation-invariance with a non-linguistic token stream.**
 
-Author: **Anthony Engelmann** — HHU Düsseldorf, BSc Computer Science (university ID: `3160882`)
+Author: **Anthony Engelmann** — HHU Düsseldorf, BSc Computer Science\
 Course: Python for NLP, SS 2026 — Dr. Shutong Feng · License: MIT
-
-Read the full report here: [Engelmann NLP Research Report](./Engelmann_NLP_Research_Report.pdf)
 
 > **Thesis.** Sequence models (LSTM, Transformer) assume *order carries information*, but natural
 > language cannot test that assumption cleanly — you cannot remove word order without destroying
@@ -15,25 +13,26 @@ Read the full report here: [Engelmann NLP Research Report](./Engelmann_NLP_Resea
 > (FNN → LSTM → Transformer). The biology is the substrate; the contribution is a controlled study of
 > **sequence-order inductive bias**.
 
+Read the full report here: [Engelmann NLP Research Report](./Engelmann_NLP_Research_Report.pdf)
+
 ---
 
 ## 1 · Research questions
 
-**Q1 — Does sequential inductive bias help when the signal is a set?**
+**Q1 — Does sequential inductive bias help when the signal is a set?**\
 The architecture ladder **FNN** (bag-of-tokens) → **LSTM** (imposed order) → **Transformer**
 (permutation-invariant set), over rank-value gene tokens, on a balanced task and a rare-class stress
 test.
 
-**Q2 — When we impose an arbitrary order, do order-sensitive models exploit it?**
+**Q2 — When we impose an arbitrary order, do order-sensitive models exploit it?**\
 An **ordering ablation**, analysed *paired within-seed*: LSTM `rank` / `random` / `ascending`,
 importance-ordering, and Transformer **positional-encoding on/off**.
 
-Why a cell is a good NLP testbed: it is (i) **order-free** — any ordering is our choice, so we can
-ablate order directly; (ii) **position-controllable** — we place known content at any slot to probe
-recency/primacy; (iii) **dual-channel** — each token is *(gene-id, expression-value)*, so we can ask
-whether position is redundant with an explicit value channel; (iv) a **syntax-free vocabulary** of
-~2,000 "words," isolating the bag-of-tokens regime from the sequential-syntax regime text confounds.
-
+**Why a single-cell profile is a good NLP testbed:**
+* **Order-free:** Any ordering is our choice, so we can ablate order directly.
+* **Position-controllable:** We place known content at any slot to probe recency and primacy.
+* **Dual-channel:** Each token is *(gene-id, expression-value)*, so we can ask whether position is redundant with an explicit value channel.
+* **Syntax-free vocabulary:** A vocabulary of ~2,000 "words," isolating the bag-of-tokens regime from the sequential-syntax regime text confounds.
 ---
 
 ## 2 · Data
@@ -78,11 +77,11 @@ not training setup.
 - **Balanced task:** AUROC + AUPRC + **ECE** (calibration) on the held-out-patient test set; model
   selected on validation loss (test touched once); multi-seed with 95% CIs.
 - **Rare-class stress test:** AUPRC, sensitivity@FPR, and ECE across a dilution series
-  (`scripts/evaluate_mrd.py` → `mrd_lod.csv`).
+  (`scripts/evaluate_mrd.py` → `mrd_lod.csv`).  
 - **Paired within-seed analysis:** deltas on the *same* patient split (one knob changed), so the
   patient-split variance that dominates cross-seed spread cancels.
+<img src="./notebooks/figures/04b_mrd_lod_curves.png" alt="MRD Limit of Detection Results" width="600">
 
-<img src="./notebooks/figures/04b_mrd_lod_curves.png" alt="MRD Limit of Detection Results" width="800">
 ---
 
 ## 5 · Quickstart (no data needed)
@@ -155,12 +154,9 @@ sequence-order-4nlp/
 ├── notebooks/                       ← 00–05 analysis → figures/ + tables/ 
 └── tests/                           ← pytest unit tests
 ```
-
-The 8-page report is submitted separately as a PDF (its LaTeX source is kept out of the repo).
-
 ---
 
-## 9 · Code ↔ experiment ↔ report mapping
+## 9 · Experiment Tracking & Report Mapping
 
 | Experiment | Command | Artifact | Notebook | Report |
 |---|---|---|---|---|
@@ -170,11 +166,9 @@ The 8-page report is submitted separately as a PDF (its LaTeX source is kept out
 | Q2 positional encoding | `train.py -m model.positional_encoding=none,sinusoidal` | `metrics.json` + `mrd_lod.csv` | `05` | Results · Q2 |
 
 ---
+## 10 · Contact
 
-## 10 · Connection to the course & AI usage
+If you have questions about the implementation, or want to discuss applying machine learning concepts to computational oncology and bioinformatics, feel free to reach out. 
 
-Tokenization/vocabulary (**P2**), padding + embeddings (**P5.1**), attention masking (**P6, P8.1**),
-FNN (**P3, P4.2**), LSTM (**P5.2**), Transformer encoder (**P8.1**). The project *extends* the
-practicals into a controlled inductive-bias study rather than reproducing a notebook.
-
-A full **Declaration of AI Usage** is included in the report (per the project guidelines).
+* **LinkedIn:** [Anthony Engelmann](https://www.linkedin.com/in/anthony-engelmann)
+* **GitHub:** [@anthonyengelmann](https://github.com/anthonyengelmann)
