@@ -13,7 +13,7 @@ Course: Python for NLP, SS 2026 — Dr. Shutong Feng · License: MIT
 > (FNN → LSTM → Transformer). The biology is the substrate; the contribution is a controlled study of
 > **sequence-order inductive bias**.
 
-[Read the full 8-page report here](./Engelmann_NLP_Research_Report.pdf)
+Read the full report here: [Engelmann NLP Research Report](./Engelmann_NLP_Research_Report.pdf)
 
 ---
 
