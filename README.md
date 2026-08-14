@@ -5,6 +5,8 @@
 Author: **Anthony Engelmann** — HHU Düsseldorf, BSc Computer Science (university ID: `3160882`)
 Course: Python for NLP, SS 2026 — Dr. Shutong Feng · License: MIT
 
+Read the full report here: [Engelmann NLP Research Report](./Engelmann_NLP_Research_Report.pdf)
+
 > **Thesis.** Sequence models (LSTM, Transformer) assume *order carries information*, but natural
 > language cannot test that assumption cleanly — you cannot remove word order without destroying
 > meaning. A single-cell gene-expression profile is an **order-free token set** with an explicit
@@ -13,7 +15,7 @@ Course: Python for NLP, SS 2026 — Dr. Shutong Feng · License: MIT
 > (FNN → LSTM → Transformer). The biology is the substrate; the contribution is a controlled study of
 > **sequence-order inductive bias**.
 
-Read the full report here: [Engelmann NLP Research Report](./Engelmann_NLP_Research_Report.pdf)
+![Cell Representation Methodology](./notebooks/figures/03_cell_representation.png)
 
 ---
 
@@ -79,6 +81,8 @@ not training setup.
   (`scripts/evaluate_mrd.py` → `mrd_lod.csv`).
 - **Paired within-seed analysis:** deltas on the *same* patient split (one knob changed), so the
   patient-split variance that dominates cross-seed spread cancels.
+
+  ![MRD Limit of Detection Results](./notebooks/figures/04b_mrd_lod_curves.png)
 
 ---
 
