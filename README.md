@@ -5,8 +5,6 @@
 Author: **Anthony Engelmann** — HHU Düsseldorf, BSc Computer Science (university ID: `3160882`)
 Course: Python for NLP, SS 2026 — Dr. Shutong Feng · License: MIT
 
-[Read the full 8-page report here](./Engelmann_NLP_Research_Report.pdf)
-
 > **Thesis.** Sequence models (LSTM, Transformer) assume *order carries information*, but natural
 > language cannot test that assumption cleanly — you cannot remove word order without destroying
 > meaning. A single-cell gene-expression profile is an **order-free token set** with an explicit
@@ -14,6 +12,8 @@ Course: Python for NLP, SS 2026 — Dr. Shutong Feng · License: MIT
 > **instrument** to measure what sequence order contributes to the standard NLP architecture ladder
 > (FNN → LSTM → Transformer). The biology is the substrate; the contribution is a controlled study of
 > **sequence-order inductive bias**.
+
+[Read the full 8-page report here](./Engelmann_NLP_Research_Report.pdf)
 
 ---
 
