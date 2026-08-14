@@ -15,7 +15,6 @@ Read the full report here: [Engelmann NLP Research Report](./Engelmann_NLP_Resea
 > (FNN → LSTM → Transformer). The biology is the substrate; the contribution is a controlled study of
 > **sequence-order inductive bias**.
 
-<img src="./notebooks/figures/03_cell_representation.png" alt="Cell Representation Methodology" width="800">
 ---
 
 ## 1 · Research questions
@@ -63,6 +62,8 @@ is a **methods knob, not a clinical claim.**
 | **FNN** | dense 2,000-dim VHVG vector | bag-of-features; order-agnostic |
 | **LSTM** | rank-value gene tokens (embedded), `top_k=256`, masked | recurrent; order-**sensitive** |
 | **Transformer** | rank-value gene tokens, masked, mean-pool | self-attention; order-**agnostic** unless PE added |
+
+<img src="./notebooks/figures/03_cell_representation.png" alt="Cell Representation Methodology" width="800">
 
 Tokenization (`src/lyra_lite/data/representation.py::encode_cells`): each cell → a padded sequence of
 *(gene-id, value)* tokens; ordering ∈ `{rank, random, ascending, importance_first/last}`; `PAD_ID` +
