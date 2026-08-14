@@ -15,8 +15,7 @@ Read the full report here: [Engelmann NLP Research Report](./Engelmann_NLP_Resea
 > (FNN → LSTM → Transformer). The biology is the substrate; the contribution is a controlled study of
 > **sequence-order inductive bias**.
 
-![Cell Representation Methodology](./notebooks/figures/03_cell_representation.png)
-
+<img src="./notebooks/figures/03_cell_representation.png" alt="Cell Representation Methodology" width="800">
 ---
 
 ## 1 · Research questions
@@ -82,8 +81,7 @@ not training setup.
 - **Paired within-seed analysis:** deltas on the *same* patient split (one knob changed), so the
   patient-split variance that dominates cross-seed spread cancels.
 
-  ![MRD Limit of Detection Results](./notebooks/figures/04b_mrd_lod_curves.png)
-
+<img src="./notebooks/figures/04b_mrd_lod_curves.png" alt="MRD Limit of Detection Results" width="800">
 ---
 
 ## 5 · Quickstart (no data needed)
