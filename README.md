@@ -168,7 +168,7 @@ sequence-order-4nlp/
 ---
 ## 10 · Contact
 
-If you have questions about the implementation, or want to discuss applying machine learning concepts to computational oncology and bioinformatics, feel free to reach out. 
+If you have questions about the implementation, or want to discuss applying machine learning concepts to computational oncology and bioinformatics, feel free to reach out! ☺️
 
 * **LinkedIn:** [Anthony Engelmann](https://www.linkedin.com/in/anthony-engelmann)
 * **GitHub:** [@anthonyengelmann](https://github.com/anthonyengelmann)
