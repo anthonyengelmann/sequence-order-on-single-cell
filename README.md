@@ -2,6 +2,9 @@
 
 **Dissecting order-sensitivity and permutation-invariance with a non-linguistic token stream.**
 
+[![CI](https://github.com/anthonyengelmann/sequence-order-on-single-cell/actions/workflows/ci.yml/badge.svg)](https://github.com/anthonyengelmann/sequence-order-on-single-cell/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
 Author: **Anthony Engelmann** — HHU Düsseldorf, BSc Computer Science\
 Course: Python for NLP, SS 2026 — Dr. Shutong Feng · License: MIT
 
