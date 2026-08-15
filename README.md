@@ -13,6 +13,29 @@ Course: Python for NLP, SS 2026 — Dr. Shutong Feng · License: MIT
 > (FNN → LSTM → Transformer). The biology is the substrate; the contribution is a controlled study of
 > **sequence-order inductive bias**.
 
+### Key findings
+
+- **Sequential structure buys nothing on a set (Q1):**\
+  On the balanced task all three architectures saturate (~0.99 AUROC). Under a rare-class stress test the order-agnostic
+  **FNN is the best-calibrated model** — paired within-seed, ΔECE = −0.017 vs LSTM (9/10 seeds,
+  σ≈−2.6) and −0.020 vs Transformer (σ≈−2.4) — while the two sequence models are statistically
+  indistinguishable.
+- **Imposed order is not exploitable (Q2):**\
+  Rank-vs-random, ascending-vs-descending, and importance orderings are all null. The only significant effect is **positional encoding, which
+  *hurts*** rare-class detection (AUPRC σ≈−3.1, worse in 9/10 seeds) and calibration (ECE σ≈+4.1).
+- **Takeaway:** When the signal is a set carried by an explicit value channel, permutation-invariance
+  is the correct inductive bias: order is redundant, and forcing it in is actively harmful.
+
+<p align="center">
+  <img src="notebooks/figures/04b_mrd_lod_curves.png" width="60%" alt="Q1 ladder under the rare-class stress test"/><br>
+  <sub><b>Q1</b> — under the rare-class stress test, the order-agnostic FNN stays best-calibrated at every prevalence.</sub>
+</p>
+
+<p align="center">
+  <img src="notebooks/figures/05e_ordering_forest_rareclass.png" width="85%" alt="Q2 ordering ablation, paired within-seed"/><br>
+  <sub><b>Q2</b> — every imposed ordering is null (intervals straddle 0); only positional encoding moves the model, and the wrong way.</sub>
+</p>
+
 Read the full report here: [Engelmann NLP Research Report](./Engelmann_NLP_Research_Report.pdf)
 
 ---
@@ -48,6 +71,13 @@ bone marrow; 84 patients). Used purely as the token substrate, no clinical claim
 | **Class balance** | strong imbalance (cohort blast fraction ~87%). Motivates the **rare-class stress test** and AUPRC/ECE alongside AUROC. |
 | **Splits** | **patient-level** 70/15/15 via `GroupShuffleSplit` on `participant_id`, no patient in two splits (leakage-free). Test = unseen patients = the distribution-shift stress source. |
 
+<p align="center">
+  <img src="notebooks/figures/02_eda_composite.png" width="35%" alt="Corpus statistics and patient-driven variance"/><br>
+  <sub><b>Corpus at a glance.</b> (a) Blast-prevalence distribution (median ~89%), motivating the rare-class
+  stress test; (b–c) UMAPs where cells cluster by <i>patient</i>, not phenotype: the distribution-shift
+  source that patient-level splits control for.</sub>
+</p>
+
 The **rare-class stress test** (code name `mrd`) is a controllable class-imbalance regime, a spike-in
 dilution driving the positive rate to 1% / 0.1%, the NLP analogue of rare-intent/entity detection. It
 is a **methods knob, not a clinical claim.**
@@ -58,17 +88,27 @@ is a **methods knob, not a clinical claim.**
 
 | Model | Representation | Inductive bias |
 |---|---|---|
-| **FNN** | dense 2,000-dim VHVG vector | bag-of-features; order-agnostic |
+| **FNN** | dense 2,000-dim HVG vector | bag-of-features; order-agnostic |
 | **LSTM** | rank-value gene tokens (embedded), `top_k=256`, masked | recurrent; order-**sensitive** |
 | **Transformer** | rank-value gene tokens, masked, mean-pool | self-attention; order-**agnostic** unless PE added |
 
-<img src="./notebooks/figures/03_cell_representation.png" alt="Cell Representation Methodology" width="800">
+<p align="center">
+  <img src="notebooks/figures/02c_token_statistics.png" width="80%" alt="Token-length statistics justifying top_k = 256"/><br>
+  <sub><b>Why <code>top_k = 256</code>.</b> The median cell expresses ~133 of 2,000 genes, and the 256
+  highest-ranked genes capture ~99% of a cell's total expression: a length-256 window keeps essentially
+  all signal while bounding attention cost.</sub>
+</p>
 
 Tokenization (`src/lyra_lite/data/representation.py::encode_cells`): each cell → a padded sequence of
 *(gene-id, value)* tokens; ordering ∈ `{rank, random, ascending, importance_first/last}`; `PAD_ID` +
 attention masking. All models are trained **from scratch** (no pretraining) under one protocol (Adam,
 `BCEWithLogitsLoss`, identical split/metrics), so differences are attributable to architecture/order,
 not training setup.
+
+<p align="center">
+  <img src="./notebooks/figures/03_cell_representation.png" width="85%" alt="From a cell to a token sequence"/><br>
+  <sub><b>From a cell to a token sequence.</b> Each cell, an unordered <i>set</i> of expressed genes, is encoded as a padded, masked sequence of <i>(gene-id, value)</i> tokens; the imposed ordering is the controlled variable behind Q2.</sub>
+</p>
 
 ---
 
@@ -80,7 +120,6 @@ not training setup.
   (`scripts/evaluate_mrd.py` → `mrd_lod.csv`).  
 - **Paired within-seed analysis:** deltas on the *same* patient split (one knob changed), so the
   patient-split variance that dominates cross-seed spread cancels.
-<img src="./notebooks/figures/04b_mrd_lod_curves.png" alt="MRD Limit of Detection Results" width="600">
 
 ---
 
@@ -134,7 +173,7 @@ imports, and the model forward shapes (`tests/`).
 ## 8 · Repository map
 
 ```
-sequence-order-4nlp/
+sequence-order-on-single-cell/
 ├── README.md
 ├── pyproject.toml · uv.lock         ← environment (uv), pinned versions
 ├── configs/                         ← Hydra: data/ model/ representation/ training/ eval/
