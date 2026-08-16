@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
 
 Author: **Anthony Engelmann** — HHU Düsseldorf, BSc Computer Science\
-Course: Python for NLP, SS 2026 — Dr. Shutong Feng · License: MIT
+Course: Python for NLP, SS 2026 — Dr. Shutong Feng · Grade: 1.0 · License: MIT
 
 > **Thesis.** Sequence models (LSTM, Transformer) assume *order carries information*, but natural
 > language cannot test that assumption cleanly — you cannot remove word order without destroying
